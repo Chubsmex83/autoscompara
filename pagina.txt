@@ -1,0 +1,166 @@
+Build a complete, production-ready single-page web application called "AutoCompara MX" — a vehicle comparison tool exclusively for cars and pickup trucks officially sold in Mexico. The app must be written in a single HTML file with embedded CSS and JavaScript (no external frameworks, no build tools, no backend required).
+
+---
+
+## IMPORTANT SCOPE CONSTRAINT
+
+This tool is EXCLUSIVELY for vehicles that are officially sold through authorized dealerships in Mexico as of 2024-2025. All prices must be in Mexican Pesos (MXN) reflecting official MSRP from the Mexican market. Do NOT include vehicles that are not officially available in Mexico (e.g. no US-only trims, no models not distributed in Mexico). All content, labels, units, and UI text must be in Spanish.
+
+---
+
+## DATA
+
+Create a hardcoded dataset of at least 20 vehicles across different price segments available in Mexico (económico, medio, premium). Include sedans, SUVs, hatchbacks, and pickup trucks that are actually sold at Mexican dealerships. For each vehicle include:
+
+- brand, model, year (2024 or 2025), trim level (versión)
+- price_mxn (precio de lista oficial en México, en pesos)
+- category (e.g. "Sedán", "SUV", "Pickup", "Hatchback")
+- engine (cilindrada, cilindros, tipo de combustible: gasolina/diésel/híbrido)
+- horsepower, torque_nm
+- transmission (manual/automática, número de velocidades)
+- drivetrain (FWD, RWD, AWD, 4x4)
+- fuel_economy_city (km/l ciudad), fuel_economy_highway (km/l carretera)
+- cargo_volume_liters
+- towing_capacity_kg (0 si no aplica)
+- seating_capacity
+- safety_rating (1-5 estrellas, basado en LATINNCAP o estimado para México)
+- warranty_years (garantía en años vigente en México)
+- key_features (array de strings con equipamiento disponible en México)
+- pros (array de 3 strings)
+- cons (array de 3 strings)
+- image_placeholder_color (hex color para el placeholder)
+- dealer_network (string: "Nacional" si hay distribuidores en todo México, o lista de regiones)
+
+Use ONLY models confirmed sold in Mexico, such as (but not limited to):
+Nissan Frontier, Nissan Kicks, Nissan Sentra, Nissan NP300,
+Toyota Hilux, Toyota RAV4, Toyota Corolla, Toyota Land Cruiser,
+Volkswagen Jetta, Volkswagen Tiguan, Volkswagen T-Cross,
+Chevrolet Onix, Chevrolet Trax, Chevrolet Silverado,
+Ford Maverick, Ford Ranger, Ford Bronco Sport, Ford Territory,
+Kia Sportage, Kia Rio, Kia Carnival,
+Honda CR-V, Honda HR-V, Honda Civic,
+Mazda CX-5, Mazda3, Mazda CX-30,
+RAM 1500, RAM 700,
+Hyundai Tucson, Hyundai Accent,
+SEAT Ateca, SEAT Ibiza, SEAT Arona,
+Suzuki Jimny, Suzuki Vitara,
+Jeep Wrangler, Jeep Compass,
+Renault Duster, Renault Koleos.
+
+Use realistic 2024-2025 official Mexican MSRP prices for each model.
+
+---
+
+## UI & LAYOUT
+
+### Header
+- App name "AutoCompara MX" with a clean logo icon and a small Mexican flag emoji (🇲🇽) or subtle accent
+- Subtitle: "Compara vehículos disponibles en México y toma la mejor decisión de compra"
+- Small disclaimer text: "Precios de lista oficiales en México · Modelos disponibles en agencias nacionales"
+
+### Vehicle Selector (always visible at top)
+- 3 side-by-side selection panels (slots)
+- Each slot has:
+  - A searchable select/dropdown to pick a vehicle from the dataset
+  - Once selected: show a vehicle card with image placeholder (colored div with car icon), brand/model, price in MXN formatted as currency (e.g. $459,900), and category badge
+  - A "✕ Quitar" button to clear the slot
+  - An empty state with dashed border and "+ Agregar vehículo" text
+- A "Comparar ahora" CTA button once at least 2 vehicles are selected
+
+### Comparison Table (shown after clicking "Comparar")
+Full responsive comparison table grouped into sections:
+
+**Precio y Categoría**
+- Precio de lista en México (MXN)
+- Categoría
+- Año / Versión
+
+**Motor y Rendimiento**
+- Motor (cilindrada + tipo)
+- Potencia (HP)
+- Torque (Nm)
+- Transmisión
+- Tracción
+- Consumo ciudad (km/l)
+- Consumo carretera (km/l)
+
+**Capacidad y Practicidad**
+- Capacidad de cajuela/carga (litros)
+- Capacidad de arrastre (kg)
+- Número de pasajeros
+
+**Seguridad y Garantía**
+- Calificación de seguridad LATINNCAP (estrellas)
+- Garantía vigente en México (años)
+
+**Equipamiento Destacado**
+- Features como tags/pills
+
+**Ventajas y Desventajas**
+- Pros con íconos de palomita verde
+- Contras con íconos de X roja
+
+**Red de Distribuidores**
+- Cobertura de agencias en México
+
+Table behavior:
+- First column sticky (row label)
+- Highlight best numeric value per row in green, worst in red/orange
+- Works with 2 or 3 vehicles selected
+
+### Sección de Recomendación (below table)
+Programmatic JS scoring algorithm that weights:
+- Relación precio-valor (precio vs equipamiento)
+- Calificación de seguridad
+- Rendimiento de combustible
+- Practicidad (cajuela + pasajeros)
+- Desempeño (HP + torque)
+
+Output:
+- Winner card with trophy icon and explanation
+- CSS-only horizontal score bars per vehicle per criterion
+- 3-4 sentence recommendation paragraph in Spanish
+- "¿Para quién es ideal?" use-case tags (e.g. "Familia numerosa", "Ciudad", "Carretera larga", "Terreno difícil", "Primer auto", "Presupuesto ajustado")
+
+---
+
+## DESIGN REQUIREMENTS
+
+- Clean, modern automotive site aesthetic
+- Color palette: primary blue (#1A56DB), white, light gray (#F8F9FA)
+- Fully responsive: mobile stacks vertically, desktop shows side-by-side columns
+- Smooth scroll to comparison table after "Comparar"
+- Sticky vehicle selector header while scrolling the table
+- Category badges: Sedán=azul, SUV=verde, Pickup=naranja, Hatchback=morado
+- Currency: Intl.NumberFormat with "es-MX" locale and MXN currency
+- Google Fonts: Inter (load from fonts.googleapis.com)
+- No external JS libraries — pure vanilla JS
+- No external CSS frameworks
+
+---
+
+## FILTERING BAR (above vehicle selector)
+
+- Filtrar por categoría: Todos | Sedán | SUV | Pickup | Hatchback
+- Filtrar por precio: Menos de $300,000 | $300,000 – $600,000 | Más de $600,000
+- Filters update the dropdown options in real time
+
+---
+
+## TECHNICAL REQUIREMENTS
+
+- Single file: autocompara-mx.html
+- No console errors
+- Works offline (only Google Fonts may use CDN)
+- All vehicle data hardcoded in a JS const array at top of script
+- State: selectedVehicles array (max 3), reactive re-render on change
+- Semantic HTML with aria-labels
+- Print stylesheet included (so users can print the comparison sheet)
+
+---
+
+## DELIVERABLE
+
+One single file: `autocompara-mx.html`
+
+Make it feel like a real, trustworthy product aimed at Mexican car buyers. All text, labels, units, and UI copy must be in Spanish. Prices in MXN. Only officially available models in Mexico.
